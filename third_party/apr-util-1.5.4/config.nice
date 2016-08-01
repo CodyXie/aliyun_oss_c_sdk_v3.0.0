@@ -1,0 +1,8 @@
+#! /bin/sh
+#
+# Created by configure
+
+"./configure" \
+"--prefix=/home/xkd/cars/external/aliyun_oss_c_sdk_v3.0.0/third_party/apr-util-1.5.4/../../buildout" \
+"--with-apr=/home/xkd/cars/external/aliyun_oss_c_sdk_v3.0.0/third_party/apr-util-1.5.4/../../buildout" \
+"$@"
