@@ -4,9 +4,10 @@ LOCAL_PATH:=$(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_C_INCLUDES := \
-	expat/lib \
+	external/expat/lib \
 	external/sqlite/dist \
-	external/aliyun_oss_c_sdk_v3.0.0/buildout/include/apr-1 \
+	external/aliyun_oss_c_sdk_v3.0.0/third_party/libiconv-1.14/include \
+	external/aliyun_oss_c_sdk_v3.0.0/third_party/include/apr-1 \
 	external/aliyun_oss_c_sdk_v3.0.0/third_party/apr-util-1.5.4/include \
 	external/aliyun_oss_c_sdk_v3.0.0/third_party/apr-util-1.5.4/include/private
 
@@ -57,7 +58,7 @@ LOCAL_SRC_FILES := \
     xml/apr_xml.c \
     dbd/apr_dbd_sqlite3.c \
 
-LOCAL_SHARED_LIBRARIES := libdl libc libexpat
+LOCAL_SHARED_LIBRARIES := libdl libc libexpat libiconv libsqlite libapr
 LOCAL_CFLAGS := -O2 -pthread -U__LP64__ -DHAVE_CONFIG_H -DLINUX -D_REENTRANT -D_GNU_SOURCE
 LOCAL_MODULE := libapr-util
 LOCAL_MODULE_TAGS := optional
