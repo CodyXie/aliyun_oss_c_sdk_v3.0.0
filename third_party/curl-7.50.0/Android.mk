@@ -11,10 +11,13 @@ curl_CFLAGS := -Wpointer-arith -Wwrite-strings -Wunused -Winline \
 	-Wnested-externs -Wmissing-declarations -Wmissing-prototypes -Wno-long-long \
 	-Wfloat-equal -Wno-multichar -Wno-sign-compare -Wno-format-nonliteral \
 	-Wendif-labels -Wstrict-prototypes -Wdeclaration-after-statement \
-	-Wno-system-headers -DHAVE_CONFIG_H -DOS='$(version_string)' -Werror
+	-Wno-system-headers -DHAVE_CONFIG_H -DOS='$(version_string)'
+#curl_CFLAGS += -Werror
 # Bug: http://b/29823425 Disable -Wvarargs for Clang update to r271374
 curl_CFLAGS += -Wno-varargs
 curl_includes := \
+	external/zlib \
+	external/openssl/include \
 	$(LOCAL_PATH)/include/ \
 	$(LOCAL_PATH)/lib
 #########################
@@ -32,7 +35,7 @@ include $(BUILD_STATIC_LIBRARY)
 #########################
 # Build the libcurl shared library
 libcurl_shared_libs := libcrypto libssl libz
-libcurl_host_shared_libs := libcrypto libssl libz-host
+libcurl_host_shared_libs := libcrypto-host libssl-host libz-host
 include $(CLEAR_VARS)
 include $(LOCAL_PATH)/lib/Makefile.inc
 LOCAL_SRC_FILES := $(addprefix lib/,$(CSOURCES))
@@ -40,6 +43,9 @@ LOCAL_C_INCLUDES := $(curl_includes)
 LOCAL_CFLAGS := \
 	$(curl_CFLAGS) \
 	-D_GNU_SOURCE=1
+
+LOCAL_LDFLAGS := \
+	-L prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.11-4.8/sysroot/usr/lib32 -lrt
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
 LOCAL_MODULE:= libcurl-host
 LOCAL_MODULE_TAGS := optional
