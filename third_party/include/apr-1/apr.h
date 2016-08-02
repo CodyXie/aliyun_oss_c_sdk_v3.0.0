@@ -314,7 +314,7 @@ typedef  unsigned short  apr_uint16_t;
 typedef  int             apr_int32_t;
 typedef  unsigned int    apr_uint32_t;
 
-#define APR_SIZEOF_VOIDP 8
+#define APR_SIZEOF_VOIDP 4
 
 /*
  * Darwin 10's default compiler (gcc42) builds for both 64 and
@@ -349,8 +349,6 @@ typedef  unsigned int    apr_uint32_t;
  #define UINT64_C(v)  (v ## ULL)
 #endif
 #else
- typedef  long            apr_int64_t;
- typedef  unsigned long   apr_uint64_t;
 #endif
 
 typedef  size_t          apr_size_t;
@@ -358,6 +356,36 @@ typedef  ssize_t         apr_ssize_t;
 typedef  off_t           apr_off_t;
 typedef  socklen_t       apr_socklen_t;
 typedef  ino_t           apr_ino_t;
+#undef APR_SIZEOF_VOIDP
+#undef INT64_C
+#undef UINT64_C
+#ifdef __LP64__
+ typedef  long            apr_int64_t;
+ typedef  unsigned long   apr_uint64_t;
+ #define APR_SIZEOF_VOIDP     8
+ #define INT64_C(v)   (v ## L)
+ #define UINT64_C(v)  (v ## UL)
+#else
+ typedef  long long            apr_int64_t;
+ typedef  unsigned long long   apr_uint64_t;
+ #define APR_SIZEOF_VOIDP     4
+ #define INT64_C(v)   (v ## LL)
+ #define UINT64_C(v)  (v ## ULL)
+#endif
+
+#ifdef __LP64__
+ #define APR_HAS_LARGE_FILES  0
+ #define APR_SIZEOF_VOIDP     8
+ #define APR_INT64_T_FMT      "ld"
+ #define APR_UINT64_T_FMT     "lu"
+ #define APR_UINT64_T_HEX_FMT "lx"
+#else
+ #define APR_HAS_LARGE_FILES  1
+ #define APR_SIZEOF_VOIDP     4
+ #define APR_INT64_T_FMT      "lld"
+ #define APR_UINT64_T_FMT     "llu"
+ #define APR_UINT64_T_HEX_FMT "llx"
+#endif
 
 #if APR_SIZEOF_VOIDP == 8
 typedef  apr_uint64_t            apr_uintptr_t;
